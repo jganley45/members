@@ -1,0 +1,7 @@
+\c postgres
+DROP DATABASE IF EXISTS mem_db;
+CREATE DATABASE mem_db;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO memadmin;
+GRANT ALL PRIVILEGES ON DATABASE mem_db TO memadmin;
+\c mem_db memadmin
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

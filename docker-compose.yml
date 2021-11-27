@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+
+  postgresd:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    networks:
+      - app-mem
+    environment:
+      - POSTGRES_DB=mem_db
+      - POSTGRES_USER=memadmin
+      - POSTGRES_PASSWORD=${MEM_DB_PASSWORD}
+    volumes:
+      - ./mem-init.sql:/docker-entrypoint-initdb.d/mem-init.sql
+
+networks:
+  app-mem:
