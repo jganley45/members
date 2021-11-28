@@ -14,6 +14,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
@@ -26,6 +28,7 @@ public class GeneralRepoITCase extends AbstractITCase {
   String email1 = "sparker@dd.com";
   String loginId1 = "sparker";
   String name1 = "Sam Parker1";
+  String name2 = "Joe Ganley";
 
 
   @BeforeAll
@@ -49,8 +52,8 @@ public class GeneralRepoITCase extends AbstractITCase {
 
   @Test
   @Order(1)
-  public void test_User() throws Exception {
-    log.info("****** GeneralRepoITCase - test_User ***************");
+  public void test_FindUser() throws Exception {
+    log.info("****** GeneralRepoITCase - test_FindUser ***************");
 
     // CRUD
     List<User> users = userRepository.findAll();
@@ -59,4 +62,56 @@ public class GeneralRepoITCase extends AbstractITCase {
 
   }
 
+  @Test
+  @Order(4)
+  public void test_UpdateName() {
+    Optional<User> userOptional = userRepository.findByName(name1);
+
+    User u = userOptional.get();
+    String name = u.getName();
+    assertEquals(name1, name);
+    u.setName(name2);
+
+    User savedUser = userRepository.saveAndFlush(u);
+    assertNotNull(savedUser);
+
+    assertEquals(name2, savedUser.getName());
+  }
+
+  @Test
+  @Order(5)
+  public void test_DeleteByName() {
+    Optional<User> userOptional = userRepository.findByName(name2);
+
+    assertTrue(userOptional.isPresent());
+    userRepository.delete(userOptional.get());
+
+    Optional<User> userOptional2 = userRepository.findByName(name2);
+    assertTrue(userOptional2.isEmpty());
+
+
+  }
+
+  @Test
+  @Order(2)
+  public void test_LoginID() throws Exception {
+    log.info("****** GeneralRepoITCase - test_LoginID ***************");
+
+    // CRUD
+    Optional<User> users = userRepository.findByLoginId(loginId1);
+    assertTrue(users.isPresent());
+    assertNotNull(users.get());
+
+  }
+
+  @Test
+  @Order(3)
+  public void test_Email() throws Exception {
+    log.info("****** GeneralRepoITCase - test_Email ***************");
+    Optional<User> user = userRepository.findByEmail(email1);
+    assertTrue(user.isPresent());
+    assertNotNull(user.get());
+    user = userRepository.findByEmail("joe@ganleys.com");
+    assertTrue(user.isEmpty());
+  }
 }
