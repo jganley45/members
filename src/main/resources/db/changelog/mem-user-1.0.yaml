@@ -1,0 +1,61 @@
+---
+databaseChangeLog:
+  - changeSet:
+      id: mem-user-1.0
+      author: jganley
+      changes:
+        - createTable:
+            tableName: mem_user
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: login_id
+                  type: VARCHAR(128)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(128)
+                  constraints:
+                    - nullable: false
+
+              # Audit Columns
+              - column:
+                  name: created_time
+                  type: TIMESTAMP
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: created_by
+                  type: VARCHAR(200)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: updated_time
+                  type: TIMESTAMP
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: updated_by
+                  type: VARCHAR(200)
+                  constraints:
+                    - nullable: false
+  - changeSet:
+      id: mem-user-pk-1.0
+      author: jganley
+      changes:
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: mem_user_pk
+            tableName: mem_user
+            validate: true
+
