@@ -28,27 +28,6 @@ databaseChangeLog:
                   constraints:
                     - nullable: false
 
-              # Audit Columns
-              - column:
-                  name: created_time
-                  type: TIMESTAMP
-                  constraints:
-                    - nullable: false
-              - column:
-                  name: created_by
-                  type: VARCHAR(200)
-                  constraints:
-                    - nullable: false
-              - column:
-                  name: updated_time
-                  type: TIMESTAMP
-                  constraints:
-                    - nullable: false
-              - column:
-                  name: updated_by
-                  type: VARCHAR(200)
-                  constraints:
-                    - nullable: false
   - changeSet:
       id: mem-user-pk-1.0
       author: jganley
