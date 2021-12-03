@@ -5,13 +5,7 @@ import com.members.AbstractITCase;
 import com.members.MembersApplication;
 import com.members.model.User;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +22,10 @@ public class GeneralRepoITCase extends AbstractITCase {
   String email1 = "sparker@dd.com";
   String loginId1 = "sparker";
   String name1 = "Sam Parker1";
-  String name2 = "Joe Ganley";
+  String email2 = "kerry@dd.com";
+  String loginId2 = "kerry";
+  String name2 = "Kerry O";
+
 
 
   @BeforeAll
@@ -48,6 +45,33 @@ public class GeneralRepoITCase extends AbstractITCase {
       return;
     }
   }
+  @AfterAll
+  public void postTests() {
+    try {
+      cleanupData();
+
+      User user1 = User.builder().email(email1).name(name1)
+              .loginId(loginId1).build();
+
+      userRepository.saveAndFlush(user1);
+
+
+       user1= User.builder().email(email2).name(name2)
+              .loginId(loginId2).build();
+
+      userRepository.saveAndFlush(user1);
+
+
+    } catch (Exception e) {
+      // ** catch any exception and FAIL
+      log.error("GeneralRepoITCase @BEFORE ALL - General Exception occurred" + e);
+      e.printStackTrace();
+      return;
+    }
+
+
+  }
+
 
 
   @Test

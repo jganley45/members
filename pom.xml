@@ -200,6 +200,38 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--Code coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<propertyName>surefire.argLine</propertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<propertyName>failsafe.argLine</propertyName>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<append>true</append>
+					<destFile>${jacoco.combined.reportPath}</destFile>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
