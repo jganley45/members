@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +27,7 @@ public class UserController {
     @GetMapping(consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,
            path = {"get-users"})
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<User>> getUserSession() {
+    public ResponseEntity<List<User>> getUsers() {
         log.info("Here in get-users");
        List<User> users = userRepository.findAll();
        return ResponseEntity.ok(users);
@@ -56,13 +57,39 @@ public class UserController {
         log.info("id2: {}", id);
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new RuntimeException(String.format("user with %d not found", id));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("user with id:%d not found", id));
         }
         userRepository.delete(user.get());
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-
+    @PatchMapping(path = "user/{id}", consumes = "application/json")
+    @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
+        log.info("id1: {}", id);
+        if (Objects.isNull(id)) {
+            throw new RuntimeException("null id");
+        }
+        log.info("id2: {}", id);
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("user with id:%d not found", id));
+        }
+        log.info("user: {}", user);
+        if (Objects.nonNull(user.getEmail())) {
+            userOptional.get().setEmail(user.getEmail());
+        }
+        if (Objects.nonNull(user.getName())) {
+            userOptional.get().setName(user.getName());
+        }
+        if (Objects.nonNull(user.getLoginId())) {
+            userOptional.get().setLoginId(user.getLoginId());
+        }
+        userRepository.saveAndFlush(userOptional.get());
+        return ResponseEntity.ok(userOptional.get());
+    }
 
 
 }
