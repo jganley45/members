@@ -74,6 +74,7 @@ public class UserController {
         log.info("id2: {}", id);
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
+            // https://www.baeldung.com/spring-response-status-exception
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     String.format("user with id:%d not found", id));
         }
