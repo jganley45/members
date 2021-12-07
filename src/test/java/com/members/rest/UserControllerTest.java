@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,4 +77,54 @@ public class UserControllerTest {
         //List<User> users = userResponse.getBody();
         //assertEquals(0, users.size());
     }
+
+
+    @Test
+    void testCreateUserSuccess() {
+        log.info("**** UserControllerTest - testGetUserSuccess");
+        User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
+
+        ResponseEntity<User> user3 = userController.createUser(user1);
+        log.info("u3: ..{}..", user3);
+        log.info("u1: ..{}..", user1);
+
+        assertEquals(user3.getBody(), user1);
+    }
+
+    @Test
+    void testCreateUserFail() {
+        log.info("**** UserControllerTest - testGetUserFail");
+        User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
+        try {
+            ResponseEntity<User> user3 = userController.createUser(null);
+        } catch (Exception e) {
+            log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
+            assertTrue(e.getMessage().contains("null user"));
+        }
+    }
+
+    @Test
+    void testDeleteUserSuccess() {
+        log.info("**** UserControllerTest - testDeleteUserSuccess");
+        User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
+
+        ResponseEntity<User> user3 = userController.createUser(user1);
+        log.info("u3: ..{}..", user3);
+        log.info("u1: ..{}..", user1);
+
+        assertEquals(user3.getBody(), user1);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

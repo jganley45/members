@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +40,11 @@ public class UserController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseEntity<User> createUser(@RequestBody User user) {
         if (Objects.isNull(user)) {
-            throw new RuntimeException("null user");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null user");
         }
-        log.info("user: {}", user);
+        log.info("userjoe: {}", user);
         userRepository.saveAndFlush(user);
+        log.info("userjoe2: {}", user);
         return ResponseEntity.ok(user);
     }
 

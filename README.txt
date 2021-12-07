@@ -5,6 +5,7 @@ Done:
 - Added postgres and JPA
 - Added JUnit and Mock test framework
 - Added Jacoco test coverage support
+- Halfway through testing of userController
 
 
 To-do:
