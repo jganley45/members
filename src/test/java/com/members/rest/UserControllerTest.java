@@ -23,7 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
 
 @Slf4j
@@ -108,12 +111,47 @@ public class UserControllerTest {
         log.info("**** UserControllerTest - testDeleteUserSuccess");
         User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
 
-        ResponseEntity<User> user3 = userController.createUser(user1);
-        log.info("u3: ..{}..", user3);
+        doReturn(Optional.of(user1)).when(userRepository).findById(anyInt());
+
+        ResponseEntity<Void> responseEntity = userController.deleteUser(1);
+        log.info("u22: ..{}..", responseEntity.toString());
+
+       assertTrue(responseEntity.toString().contains("NO_CONTENT"));
+       assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void testUpdateUserSuccess() {
+        log.info("**** UserControllerTest - testUpdateUserSuccess");
+        User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
+
+        doReturn(Optional.of(user1)).when(userRepository).findById(anyInt());
+
+        ResponseEntity<User> responseEntity = userController.updateUser(1, user1);
+        log.info("u22: ..{}..", responseEntity.toString());
+
+        log.info("u3: ..{}..", responseEntity);
         log.info("u1: ..{}..", user1);
 
-        assertEquals(user3.getBody(), user1);
+        assertEquals(responseEntity.getBody(), user1);
     }
+
+    @Test
+    void testUpdateUserFail() {
+        log.info("**** UserControllerTest - testGetUserFail");
+        User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
+
+        doReturn(Optional.of(user1)).when(userRepository).findById(anyInt());
+
+        try {
+            ResponseEntity<User> responseEntity = userController.updateUser(1, null);
+        } catch (Exception e) {
+            log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
+            assertTrue(e.getMessage().contains("null id"));
+        }
+    }
+
+
 
 
 

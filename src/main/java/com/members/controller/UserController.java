@@ -70,8 +70,11 @@ public class UserController {
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
         log.info("id1: {}", id);
+        if (Objects.isNull(user)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null id");
+        }
         if (Objects.isNull(id)) {
-            throw new RuntimeException("null id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null id");
         }
         log.info("id2: {}", id);
         Optional<User> userOptional = userRepository.findById(id);
