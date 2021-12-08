@@ -30,6 +30,12 @@ public abstract class AbstractITCase {
     @Autowired
     protected UserRepository userRepository;
 
+    public String email1 = "sparker@dd.com";
+    public String loginId1 = "sparker";
+    public String name1 = "Sam Parker1";
+    public String email2 = "kerry@dd.com";
+    public String loginId2 = "kerry";
+    public String name2 = "Kerry O";
 
     public void cleanupData() {
         // ** order matters here

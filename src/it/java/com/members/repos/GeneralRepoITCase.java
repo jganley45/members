@@ -19,13 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
 public class GeneralRepoITCase extends AbstractITCase {
 
-  String email1 = "sparker@dd.com";
-  String loginId1 = "sparker";
-  String name1 = "Sam Parker1";
-  String email2 = "kerry@dd.com";
-  String loginId2 = "kerry";
-  String name2 = "Kerry O";
-
 
 
   @BeforeAll
@@ -45,6 +38,7 @@ public class GeneralRepoITCase extends AbstractITCase {
       return;
     }
   }
+
   @AfterAll
   public void postTests() {
     try {
