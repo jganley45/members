@@ -60,7 +60,7 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("user with id:%d not found", id));
+                        String.format("null id"));
         }
         userRepository.delete(user.get());
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -71,7 +71,7 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
         log.info("id1: {}", id);
         if (Objects.isNull(user)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null id");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null user");
         }
         if (Objects.isNull(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null id");

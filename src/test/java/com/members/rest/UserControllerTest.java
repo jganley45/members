@@ -121,6 +121,21 @@ public class UserControllerTest {
     }
 
     @Test
+    void testDeleteUserFail() {
+        log.info("**** UserControllerTest - testDeleteUserFail");
+        User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
+
+        doReturn(Optional.empty()).when(userRepository).findById(anyInt());
+
+        try {
+            ResponseEntity<Void> responseEntity = userController.deleteUser(1);
+        } catch (Exception e) {
+            //log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
+            assertTrue(e.getMessage().contains("null id"));
+        }
+    }
+
+    @Test
     void testUpdateUserSuccess() {
         log.info("**** UserControllerTest - testUpdateUserSuccess");
         User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
@@ -134,21 +149,47 @@ public class UserControllerTest {
         log.info("u1: ..{}..", user1);
 
         assertEquals(responseEntity.getBody(), user1);
+
+        //testing a email non null
+        doReturn(Optional.of(user1)).when(userRepository).findById(anyInt());
+        user1.setEmail(null);
+        user1.setName(null);
+        user1.setLoginId(null);
+
+        ResponseEntity<User> responseEntity2 = userController.updateUser(1, user1);
+        assertEquals(responseEntity2.getBody(), user1);
+        assertNull(responseEntity2.getBody().getName());
+
+
+
     }
 
     @Test
     void testUpdateUserFail() {
         log.info("**** UserControllerTest - testGetUserFail");
         User user1 = User.builder().email(email1).name(name1).loginId(loginId1).build();
-
-        doReturn(Optional.of(user1)).when(userRepository).findById(anyInt());
-
+        //testing for null user
         try {
             ResponseEntity<User> responseEntity = userController.updateUser(1, null);
-        } catch (Exception e) {
-            log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
+        } catch (ResponseStatusException e) {
+            assertTrue(e.getMessage().contains("null user"));
+        }
+        //testing for null id
+        try {
+            ResponseEntity<User> responseEntity = userController.updateUser(null, user1);
+        } catch (ResponseStatusException e) {
+            //log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
             assertTrue(e.getMessage().contains("null id"));
         }
+        log.info("testing for user not found in the database");
+        doReturn(Optional.empty()).when(userRepository).findById(anyInt());
+        try {
+            ResponseEntity<User> responseEntity = userController.updateUser(1, user1);
+        } catch (ResponseStatusException e) {
+            log.info("JOERR:{}" , e.getMessage());
+            assertTrue(e.getMessage().contains("user with id:1 not found"));
+        }
+
     }
 
 
