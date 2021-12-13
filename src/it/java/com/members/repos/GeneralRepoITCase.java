@@ -3,10 +3,13 @@ package com.members.repos;
 
 import com.members.AbstractITCase;
 import com.members.MembersApplication;
+import com.members.model.Event;
 import com.members.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,30 +34,12 @@ public class GeneralRepoITCase extends AbstractITCase {
       User user1 = User.builder().email(email1).name(name1)
               .loginId(loginId1).build();
       userRepository.saveAndFlush(user1);
-    } catch (Exception e) {
-      // ** catch any exception and FAIL
-      log.error("GeneralRepoITCase @BEFORE ALL - General Exception occurred" + e);
-      e.printStackTrace();
-      return;
-    }
-  }
-
-  @AfterAll
-  public void postTests() {
-    try {
-      cleanupData();
-
-      User user1 = User.builder().email(email1).name(name1)
-              .loginId(loginId1).build();
-
-      userRepository.saveAndFlush(user1);
 
 
-       user1= User.builder().email(email2).name(name2)
-              .loginId(loginId2).build();
+      Event event1 = Event.builder().description(description1).location(location1)
+              .eventName(eventName1).eventDate(new Date()).build();
 
-      userRepository.saveAndFlush(user1);
-
+      eventRepository.saveAndFlush(event1);
 
     } catch (Exception e) {
       // ** catch any exception and FAIL
@@ -62,10 +47,7 @@ public class GeneralRepoITCase extends AbstractITCase {
       e.printStackTrace();
       return;
     }
-
-
   }
-
 
 
   @Test
@@ -132,4 +114,58 @@ public class GeneralRepoITCase extends AbstractITCase {
     user = userRepository.findByEmail("joe@ganleys.com");
     assertTrue(user.isEmpty());
   }
+
+  @Test
+  @Order(1)
+  public void test_eventCrud() throws Exception {
+    log.info("****** GeneralRepoITCase - test_FindEvent ***************");
+
+    // CRUD
+    List<Event> events = eventRepository.findAll();
+    assertNotNull(events);
+
+    log.info("****** GeneralRepoITCase - test_UpdateEvent ***************");
+    Optional<Event> eventOptional = eventRepository.findByEventName(eventName1);
+    assertTrue(eventOptional.isPresent());
+    Event e = eventOptional.get();
+    String name = e.getEventName();
+    assertEquals(eventName1, name);
+    e.setEventName(eventName2);
+    Event savedEvent = eventRepository.saveAndFlush(e);
+    assertNotNull(savedEvent);
+    assertEquals(eventName2, savedEvent.getEventName());
+
+
+
+
+    log.info("****** GeneralRepoITCase - test_CreateEvent ***************");
+    Event event3 = Event.builder().description(description3).location(location3)
+            .eventName(eventName3).eventDate(new Date()).build();
+
+    savedEvent = eventRepository.saveAndFlush(event3);
+    assertNotNull(savedEvent);
+    assertEquals(event3, savedEvent);
+
+    List<Event> events2 = eventRepository.findAll();
+    assertEquals(2, events2.size());
+
+    log.info("****** GeneralRepoITCase - test_DeleteEvent ***************");
+    Optional<Event> eventOptional2 = eventRepository.findByEventName(eventName2);
+
+    assertTrue(eventOptional2.isPresent());
+    eventRepository.delete(eventOptional2.get());
+
+    Optional<Event> eventOptional3 = eventRepository.findByEventName(eventName2);
+    assertTrue(eventOptional3.isEmpty());
+
+    List<Event> events3 = eventRepository.findAll();
+    assertEquals(1, events3.size());
+
+
+
+  }
+
+
+
+
 }

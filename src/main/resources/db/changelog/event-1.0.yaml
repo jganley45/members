@@ -1,0 +1,43 @@
+---
+databaseChangeLog:
+  - changeSet:
+      id: event-1.0
+      author: jganley
+      changes:
+        - createTable:
+            tableName: event
+            columns:
+              - column:
+                  name: id
+                  type: SERIAL
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(128)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: date
+                  type: TIMESTAMP
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(1024)
+                  constraints:
+                    - nullable: false
+  - changeSet:
+      id: event-pk-1.0
+      author: jganley
+      changes:
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: event_pk
+            tableName: event
+            validate: true

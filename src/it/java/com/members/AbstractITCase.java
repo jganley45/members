@@ -30,16 +30,30 @@ public abstract class AbstractITCase {
     @Autowired
     protected UserRepository userRepository;
 
+    @Autowired
+    protected EventRepository eventRepository;
+
     public String email1 = "sparker@dd.com";
     public String loginId1 = "sparker";
     public String name1 = "Sam Parker1";
     public String email2 = "kerry@dd.com";
     public String loginId2 = "kerry";
     public String name2 = "Kerry O";
+    public String location1 = "Boston";
+    public String location2 = "New York";
+    public String location3 = "Chicago";
+    public String eventName1 = "Carnival";
+    public String eventName2 = "Parade";
+    public String eventName3 = "Club";
+    public String description1 = "So much fun!";
+    public String description2 = "You'll have so much fun!";
+    public String description3 = "It'll be so much fun!";
+
 
     public void cleanupData() {
         // ** order matters here
         userRepository.deleteAllInBatch();
+        eventRepository.deleteAllInBatch();
 
     }
 }

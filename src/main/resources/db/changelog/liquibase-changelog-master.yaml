@@ -2,5 +2,7 @@
 databaseChangeLog:
   - include:
       file: db/changelog/mem-user-1.0.yaml
+  - include:
+      file: db/changelog/event-1.0.yaml
 
 
