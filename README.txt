@@ -5,7 +5,9 @@ Done:
 - Added postgres and JPA
 - Added JUnit and Mock test framework
 - Added Jacoco test coverage support
-- Halfway through testing of userController
+- Finished testing of userController / eventController
+- Finished IT testing of userController / eventController
+- About to start front angular front end
 
 
 To-do:
