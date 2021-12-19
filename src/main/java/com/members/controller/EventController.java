@@ -17,14 +17,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
-@RequestMapping(path = {"/event"})
+@RequestMapping(path = {"/"})
 @RestController
 public class EventController {
     @Autowired
     EventRepository eventRepository;
 
     @GetMapping(consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,
-           path = {"get-events"})
+           path = {"event/events"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Event>> getEvents() {
         log.info("Here in get-events");
@@ -58,7 +58,7 @@ public class EventController {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("null id"));
+                        String.format("no event found"));
         }
         eventRepository.delete(event.get());
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

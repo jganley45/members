@@ -111,7 +111,7 @@ public class EventControllerTest {
             ResponseEntity<Event> event3 = eventController.createEvent(null);
         } catch (Exception e) {
             log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
-            assertTrue(e.getMessage().contains("null user"));
+            assertTrue(e.getMessage().contains("null event"));
         }
     }
 
@@ -140,6 +140,12 @@ public class EventControllerTest {
 
         try {
             ResponseEntity<Void> responseEntity = eventController.deleteEvent(1);
+        } catch (Exception e) {
+            //log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
+            assertTrue(e.getMessage().contains("no event found"));
+        }
+        try {
+            ResponseEntity<Void> responseEntity = eventController.deleteEvent(null);
         } catch (Exception e) {
             //log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
             assertTrue(e.getMessage().contains("null id"));
@@ -174,7 +180,7 @@ public class EventControllerTest {
     }
 
     @Test
-    void testUpdateUserFail() {
+    void testUpdateEventFail() {
         log.info("**** EventControllerTest - testGetEventFail");
         Event event1 = Event.builder().description(description1).location(location1)
                 .eventName(eventName1).eventDate(new Date()).build();
@@ -182,7 +188,7 @@ public class EventControllerTest {
         try {
             ResponseEntity<Event> eventResponseEntity = eventController.updateEvent(1, null);
         } catch (ResponseStatusException e) {
-            assertTrue(e.getMessage().contains("null user"));
+            assertTrue(e.getMessage().contains("null event"));
         }
         //testing for null id
         try {
@@ -191,13 +197,13 @@ public class EventControllerTest {
             //log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
             assertTrue(e.getMessage().contains("null id"));
         }
-        log.info("testing for user not found in the database");
+        log.info("testing for event not found in the database");
         doReturn(Optional.empty()).when(eventRepository).findById(anyInt());
         try {
             ResponseEntity<Event> responseEntity = eventController.updateEvent(1, event1);
         } catch (ResponseStatusException e) {
             log.info("JOERR:{}" , e.getMessage());
-            assertTrue(e.getMessage().contains("user with id:1 not found"));
+            assertTrue(e.getMessage().contains("event with id:1 not found"));
         }
 
     }

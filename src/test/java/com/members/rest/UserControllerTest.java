@@ -131,6 +131,12 @@ public class UserControllerTest {
             ResponseEntity<Void> responseEntity = userController.deleteUser(1);
         } catch (Exception e) {
             //log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
+            assertTrue(e.getMessage().contains("no user found"));
+        }
+        try {
+            ResponseEntity<Void> responseEntity = userController.deleteUser(null);
+        } catch (Exception e) {
+            //log.info("C: {} {} ",e.getMessage().getClass(),e.getMessage());
             assertTrue(e.getMessage().contains("null id"));
         }
     }

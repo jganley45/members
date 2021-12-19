@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
-@RequestMapping(path = {"/user"})
+@RequestMapping(path = {"/"})
 @RestController
 public class UserController {
     @Autowired
@@ -26,7 +26,7 @@ public class UserController {
 
 
     @GetMapping(consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE,
-           path = {"get-users"})
+           path = {"user/users"})
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<User>> getUsers() {
         log.info("Here in get-users");
@@ -60,7 +60,7 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("null id"));
+                        String.format("no user found"));
         }
         userRepository.delete(user.get());
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
