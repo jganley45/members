@@ -42,9 +42,7 @@ public class UserController {
         if (Objects.isNull(user)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null user");
         }
-        log.info("userjoe: {}", user);
         userRepository.saveAndFlush(user);
-        log.info("userjoe2: {}", user);
         return ResponseEntity.ok(user);
     }
 
@@ -56,7 +54,6 @@ public class UserController {
         if (Objects.isNull(id)) {
             throw new RuntimeException("null id");
         }
-        log.info("id2: {}", id);
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -76,7 +73,6 @@ public class UserController {
         if (Objects.isNull(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null id");
         }
-        log.info("id2: {}", id);
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) {
             // https://www.baeldung.com/spring-response-status-exception

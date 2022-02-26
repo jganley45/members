@@ -42,7 +42,6 @@ public class EventController {
         }
         log.info("eventjoe: {}", event);
         eventRepository.saveAndFlush(event);
-        log.info("eventjoe2: {}", event);
         return ResponseEntity.ok(event);
     }
 
@@ -74,7 +73,6 @@ public class EventController {
         if (Objects.isNull(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "null id");
         }
-        log.info("id2: {}", id);
         Optional<Event> eventOptional = eventRepository.findById(id);
         if (eventOptional.isEmpty()) {
             // https://www.baeldung.com/spring-response-status-exception
